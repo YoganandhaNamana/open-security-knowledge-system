@@ -1,0 +1,23 @@
+project:
+  name: "Open Security Knowledge System"
+  acronym: "OSKS"
+  version: "1.0.0"
+  architecture_status: "FROZEN"
+  documentation_release: "2026.1"
+
+governance:
+  minimum_evidence_sources: 2
+  confidence_threshold: 4
+  require_peer_review: true
+  supported_lifecycle_stages:
+    - "Research"
+    - "Verification"
+    - "Authoring"
+    - "Technical_Review"
+    - "Published"
+    - "Deprecated"
+
+build_orchestration:
+  default_engine: "engines/generator.py"
+  template_dir: "templates/"
+  output_dir: "modules/"

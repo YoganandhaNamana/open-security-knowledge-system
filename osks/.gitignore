@@ -1,0 +1,19 @@
+# Python & Virtual Environment
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Build & Orchestration Logs
+*.log
+.pytest_cache/
+
+# Free-Tier Interactive Prompt Compilations
+prompts/compiled/
+
+# Temporary / Unfinished Research Drafts
+research/drafts/
+
+# MkDocs Local Build Artifacts
+site/

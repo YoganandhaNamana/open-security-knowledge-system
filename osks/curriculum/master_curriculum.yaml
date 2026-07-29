@@ -1,0 +1,41 @@
+curriculum_version: "1.0.0"
+
+volumes:
+  - id: "vol_01_foundations"
+    title: "Volume 01: Computer Science & Enterprise Infrastructure"
+    chapters:
+      - id: "ch_networking"
+        title: "Networking Principles & Protocol Mechanics"
+        modules:
+          - id: "NET-101"
+            title: "TCP/IP Protocol Mechanics & Session Handshakes"
+            stability: "static"
+            prerequisites: []
+            next_topics: ["NET-102"]
+            certifications: ["Network+", "CCNA", "OSCP"]
+            mitre_mapping: ["T1046"]
+            nist_controls: ["PR.AC-5"]
+
+          - id: "NET-102"
+            title: "IP Addressing, Subnetting, and Packet Analysis"
+            stability: "static"
+            prerequisites: ["NET-101"]
+            next_topics: ["NET-103"]
+            certifications: ["Network+", "OSCP"]
+            mitre_mapping: ["T1046"]
+            nist_controls: ["DE.CM-1"]
+
+  - id: "vol_02_specializations"
+    title: "Volume 02: Offensive & Defensive Operations"
+    chapters:
+      - id: "ch_systems"
+        title: "Linux Operating System Hardening & Security"
+        modules:
+          - id: "LIN-102"
+            title: "Linux Permissions, Capabilities, and Privilege Escalation"
+            stability: "static"
+            prerequisites: []
+            next_topics: ["LIN-103"]
+            certifications: ["RHCSA", "OSCP"]
+            mitre_mapping: ["T1548.001"]
+            nist_controls: ["PR.AC-6"]

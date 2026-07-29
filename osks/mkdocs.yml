@@ -1,0 +1,19 @@
+site_name: OSKS - Open Security Knowledge System
+site_description: An AI-assisted, section-by-section cybersecurity documentation system.
+docs_dir: modules
+site_dir: site
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: black
+  features:
+    - navigation.expand
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
