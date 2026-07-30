@@ -27,6 +27,13 @@ class ResearchAgent:
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
         self.logger = get_logger("osks.research_agent", root_dir)
 
+    def _write_text_file(self, path: Path, content: str) -> None:
+        try:
+            path.write_text(content, encoding="utf-8")
+        except OSError:
+            self.logger.exception("Failed to write file: %s", path.relative_to(self.root))
+            raise
+
     def construct_extraction_context(self, module_metadata: Dict[str, Any]) -> str:
         primary_sources = module_metadata.get("evidence", {}).get("sources", [])
         context_blocks = []
@@ -86,11 +93,11 @@ Strictly format output as markdown with these sections:
                 messages=[{"role": "user", "content": prompt_text}]
             )
             dossier_content = response.content[0].text
-            research_file.write_text(dossier_content, encoding="utf-8")
+            self._write_text_file(research_file, dossier_content)
             self.logger.info(f"API research dossier written: {research_file.relative_to(self.root)}")
         else:
             compiled_prompt_file = self.prompts_dir / f"research_prompt_{module_id}.md"
-            compiled_prompt_file.write_text(prompt_text, encoding="utf-8")
+            self._write_text_file(compiled_prompt_file, prompt_text)
 
             self.logger.warning(
                 f"Free-tier mode active (no ANTHROPIC_API_KEY). "
@@ -99,9 +106,9 @@ Strictly format output as markdown with these sections:
             )
 
             if not research_file.exists():
-                research_file.write_text(
-                    f"# Research Dossier: {module_id}\n\n*Awaiting response from compiled prompt: {compiled_prompt_file.name}*\n",
-                    encoding="utf-8"
+                self._write_text_file(
+                    research_file,
+                    f"# Research Dossier: {module_id}\n\n*Awaiting response from compiled prompt: {compiled_prompt_file.name}*\n"
                 )
 
         return research_file
