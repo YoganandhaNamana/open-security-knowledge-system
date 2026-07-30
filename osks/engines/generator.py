@@ -13,6 +13,19 @@ from logging_config import get_logger
 
 
 class DocumentationGenerator:
+    BUNDLE_FILES = [
+        "README.md",
+        "research.md",
+        "commands.md",
+        "labs.md",
+        "quiz.md",
+        "interview.md",
+        "references.md",
+        "diagrams.md",
+        "cheatsheet.md",
+        "revision.md"
+    ]
+
     def __init__(self, root_dir: str = "."):
         self.root = Path(root_dir)
         self.template_dir = self.root / "templates"
@@ -24,6 +37,14 @@ class DocumentationGenerator:
             trim_blocks=True,
             lstrip_blocks=True
         )
+
+    def _write_file_if_missing(self, path: Path, content: str) -> None:
+        if path.exists():
+            return
+        try:
+            path.write_text(content, encoding="utf-8")
+        except OSError:
+            raise
 
     def scaffold_topic_bundle(self, metadata_dict: dict) -> Path:
         """Generates the full topic folder structure for a given module."""
@@ -37,25 +58,14 @@ class DocumentationGenerator:
 
         chapter_path = topic_dir / "chapter.md"
         if not chapter_path.exists():
-            chapter_path.write_text(rendered_chapter, encoding="utf-8")
+            self._write_file_if_missing(chapter_path, rendered_chapter)
 
-        bundle_files = [
-            "README.md",
-            "research.md",
-            "commands.md",
-            "labs.md",
-            "quiz.md",
-            "interview.md",
-            "references.md",
-            "diagrams.md",
-            "cheatsheet.md",
-            "revision.md"
-        ]
-
-        for bfile in bundle_files:
+        for bfile in self.BUNDLE_FILES:
             file_path = topic_dir / bfile
-            if not file_path.exists():
-                file_path.write_text(f"# {metadata.id} - {bfile.split('.')[0].capitalize()}\n", encoding="utf-8")
+            self._write_file_if_missing(
+                file_path,
+                f"# {metadata.id} - {bfile.split('.')[0].capitalize()}\n"
+            )
 
         self.logger.info(f"Successfully scaffolded bundle: {topic_dir.relative_to(self.root)}")
         return topic_dir
