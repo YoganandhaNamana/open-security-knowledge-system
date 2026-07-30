@@ -34,6 +34,13 @@ class ResearchAgent:
             self.logger.exception("Failed to write file: %s", path.relative_to(self.root))
             raise
 
+    def _extract_response_text(self, response: Any, module_id: str) -> str:
+        try:
+            return response.content[0].text
+        except (AttributeError, IndexError, TypeError) as exc:
+            self.logger.exception("Unexpected Anthropic response structure for %s", module_id)
+            raise ValueError(f"Anthropic returned an unexpected response for {module_id}") from exc
+
     def construct_extraction_context(self, module_metadata: Dict[str, Any]) -> str:
         primary_sources = module_metadata.get("evidence", {}).get("sources", [])
         context_blocks = []
@@ -92,7 +99,7 @@ Strictly format output as markdown with these sections:
                 max_tokens=2500,
                 messages=[{"role": "user", "content": prompt_text}]
             )
-            dossier_content = response.content[0].text
+            dossier_content = self._extract_response_text(response, module_id)
             self._write_text_file(research_file, dossier_content)
             self.logger.info(f"API research dossier written: {research_file.relative_to(self.root)}")
         else:
