@@ -45,14 +45,22 @@ class QAEngine:
 
         research_file = module_dir / "research.md"
         if research_file.exists():
-            content = research_file.read_text(encoding="utf-8")
-            if "Awaiting response" in content:
-                errors.append("[Content Error] research.md still contains placeholder text.")
+            try:
+                content = research_file.read_text(encoding="utf-8")
+            except OSError as exc:
+                errors.append(f"[Read Error] Unable to read research.md: {exc}")
+            else:
+                if "Awaiting response" in content:
+                    errors.append("[Content Error] research.md still contains placeholder text.")
 
         if chapter_file.exists():
-            content = chapter_file.read_text(encoding="utf-8")
-            if "*(Populated from verified research dossier)*" in content:
-                errors.append("[Content Error] chapter.md Technical Deep-Dive section not yet authored.")
+            try:
+                content = chapter_file.read_text(encoding="utf-8")
+            except OSError as exc:
+                errors.append(f"[Read Error] Unable to read chapter.md: {exc}")
+            else:
+                if "*(Populated from verified research dossier)*" in content:
+                    errors.append("[Content Error] chapter.md Technical Deep-Dive section not yet authored.")
 
         is_passed = len(errors) == 0
         if is_passed:
