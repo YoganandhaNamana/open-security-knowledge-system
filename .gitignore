@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build / docs
+site/
+build/
+dist/
+
+# Logs
+logs/
+*.log
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Temporary / local
+*.tmp
+*.swp
+*.bak
+
+# Release archives
+*.zip
+OSKS_V1_Release/
+
+# VS Code (keep personal settings out of Git)
+.vscode/
+
+# Python cache
+*.egg-info/

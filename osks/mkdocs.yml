@@ -1,19 +1,84 @@
 site_name: OSKS - Open Security Knowledge System
-site_description: An AI-assisted, section-by-section cybersecurity documentation system.
+site_description: An AI-powered cybersecurity learning platform for guided modules, labs, and knowledge paths.
 docs_dir: modules
 site_dir: site
+site_url: http://127.0.0.1:8000/
+
+nav:
+  - Home: index.md
+  - Learn: getting-started.md
+  - Modules:
+      - NET-101: vol_01_foundations/ch_networking/NET-101/README.md
+      - NET-102: vol_01_foundations/ch_networking/NET-102/README.md
+      - LIN-102: vol_02_specializations/ch_systems/LIN-102/README.md
+  - Labs: labs.md
+  - Glossary: glossary.md
+  - References: references.md
+  - About: about.md
 
 theme:
   name: material
+  logo: ../docs/assets/osks-logo.svg
+  favicon: ../docs/assets/osks-logo.svg
   palette:
-    scheme: slate
-    primary: black
+    - scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
   features:
+    - navigation.tabs
+    - navigation.sections
     - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - search.highlight
+    - search.share
     - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+plugins:
+  - search
+
+extra:
+  version: 2.0.0
+  generator: OSKS Material Portal
+
+extra_css:
+  - ../docs/stylesheets/extra.css
+
+extra_javascript:
+  - ../docs/javascripts/extra.js
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
   - tables
   - toc:
       permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

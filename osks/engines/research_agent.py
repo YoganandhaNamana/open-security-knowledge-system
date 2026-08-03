@@ -115,7 +115,7 @@ Strictly format output as markdown with these sections:
             if not research_file.exists():
                 self._write_text_file(
                     research_file,
-                    f"# Research Dossier: {module_id}\n\n*Awaiting response from compiled prompt: {compiled_prompt_file.name}*\n"
+                    f"# Research Dossier: {module_id}\n\n## Status\n*Awaiting response from compiled prompt: {compiled_prompt_file.name}*\n"
                 )
 
         return research_file

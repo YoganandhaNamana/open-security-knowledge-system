@@ -46,6 +46,10 @@ class DocumentationGenerator:
         except OSError:
             raise
 
+    def _render_chapter_content(self, metadata: ModuleMetadata) -> str:
+        template = self.env.get_template("chapter.j2")
+        return template.render(metadata=metadata.model_dump(mode="json"))
+
     def scaffold_topic_bundle(self, metadata_dict: dict) -> Path:
         """Generates the full topic folder structure for a given module."""
         metadata = ModuleMetadata(**metadata_dict)
@@ -53,19 +57,34 @@ class DocumentationGenerator:
         topic_dir = self.output_base / metadata.volume / metadata.chapter / metadata.id
         topic_dir.mkdir(parents=True, exist_ok=True)
 
-        template = self.env.get_template("chapter.j2")
-        rendered_chapter = template.render(metadata=metadata.model_dump(mode="json"))
+        rendered_chapter = self._render_chapter_content(metadata)
 
         chapter_path = topic_dir / "chapter.md"
         if not chapter_path.exists():
             self._write_file_if_missing(chapter_path, rendered_chapter)
+        else:
+            existing_content = chapter_path.read_text(encoding="utf-8")
+            if "*(Populated from verified research dossier)*" in existing_content:
+                chapter_path.write_text(rendered_chapter, encoding="utf-8")
 
         for bfile in self.BUNDLE_FILES:
             file_path = topic_dir / bfile
-            self._write_file_if_missing(
-                file_path,
-                f"# {metadata.id} - {bfile.split('.')[0].capitalize()}\n"
-            )
+            if bfile == "research.md":
+                self._write_file_if_missing(
+                    file_path,
+                    f"# Research Dossier: {metadata.id}\n\n"
+                    f"## Verified Primary Source Facts\n"
+                    f"Research should be populated with verified evidence for this module.\n"
+                    f"The dossier should describe the module's core behavior, evidence sources, and operational relevance.\n\n"
+                    f"## Low-Level Protocol / System Mechanics\n"
+                    f"Document the technical behavior and operational relevance here before final QA.\n"
+                    f"Capture protocol state transitions, observation points, and defensive significance in sufficient detail.\n"
+                )
+            else:
+                self._write_file_if_missing(
+                    file_path,
+                    f"# {metadata.id} - {bfile.split('.')[0].capitalize()}\n"
+                )
 
         self.logger.info(f"Successfully scaffolded bundle: {topic_dir.relative_to(self.root)}")
         return topic_dir

@@ -7,6 +7,24 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
+
+REQUIRED_CHAPTER_HEADINGS = [
+    "## 📌 1. Module Overview & Domain Mechanics",
+    "## 🎯 2. Prerequisites & Target Learning Outcomes",
+    "## 🧠 3. Technical Deep-Dive & Architecture",
+    "## ⚡ 4. Operational Commands & Tooling",
+    "## 🧪 5. Hands-on Lab Mapping",
+    "## 🛡️ 6. Enterprise Defense & Hardening",
+    "## 📚 7. Reference & Citation Matrix",
+]
+
+PLACEHOLDER_MARKERS = [
+    "*(Populated from verified research dossier)*",
+    "Pending Lab Assignment",
+    "How adversaries abuse or exploit this target.",
+    "Hardening steps and detection signatures.",
+]
+
 sys.path.append(str(Path(__file__).parent))
 from metadata import MetadataEngine
 from logging_config import get_logger
@@ -50,8 +68,13 @@ class QAEngine:
             except OSError as exc:
                 errors.append(f"[Read Error] Unable to read research.md: {exc}")
             else:
-                if "Awaiting response" in content:
+                normalized = content.strip()
+                if not normalized:
+                    errors.append("[Content Error] research.md is empty.")
+                elif "Awaiting response" in normalized or (normalized.startswith("# Research Dossier") and "## Status" in normalized):
                     errors.append("[Content Error] research.md still contains placeholder text.")
+                elif len(normalized.splitlines()) < 8:
+                    errors.append("[Content Error] research.md is too short to be meaningful.")
 
         if chapter_file.exists():
             try:
@@ -59,6 +82,18 @@ class QAEngine:
             except OSError as exc:
                 errors.append(f"[Read Error] Unable to read chapter.md: {exc}")
             else:
+                body = content.split("---", 2)[-1] if content.count("---") >= 2 else content
+                if len(body.strip().splitlines()) < 12:
+                    errors.append("[Content Error] chapter.md contains insufficient body content.")
+
+                for heading in REQUIRED_CHAPTER_HEADINGS:
+                    if heading not in content:
+                        errors.append(f"[Content Error] chapter.md is missing required heading: {heading}")
+
+                for marker in PLACEHOLDER_MARKERS:
+                    if marker in content:
+                        errors.append(f"[Content Error] chapter.md contains placeholder content: {marker}")
+
                 if "*(Populated from verified research dossier)*" in content:
                     errors.append("[Content Error] chapter.md Technical Deep-Dive section not yet authored.")
 

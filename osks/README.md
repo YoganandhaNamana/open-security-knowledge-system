@@ -1,44 +1,66 @@
 # OSKS — Open Security Knowledge System
 
-A structured, AI-assisted cybersecurity knowledge base built section-by-section
-(Volume → Module → Chapter → Section → Topic), not generated in bulk. Every module
-goes through Research → Verification → Authoring → QA before it's committed.
+OSKS is a structured, AI-assisted cybersecurity knowledge system designed for guided curriculum generation, module authoring, and documentation publishing. Each module follows a transparent workflow of research, verification, authoring, and QA before it is considered ready.
 
-## Pilot Module: NET-101
+## Project Description
 
-`modules/vol_01_foundations/ch_networking/NET-101/` contains a complete, QA-passing
-example module — TCP/IP Protocol Mechanics & Session Handshakes — demonstrating the
-full 11-file bundle (chapter, research dossier, lab, quiz, interview Q&A, cheatsheet,
-references, etc.).
+The project provides a lightweight but extensible framework for building curated cybersecurity learning modules. It combines a Python-based CLI, curriculum definitions, generation engines, and an MkDocs portal so content can be created and published in a repeatable way.
 
-## Structure
-```
+## Features
+
+- Structured curriculum scaffolding for volume, chapter, and module bundles
+- Research, authoring, and QA stages for each module
+- CLI orchestration for scaffold, research, write, and QA workflows
+- MkDocs-based documentation publishing for modules, labs, and references
+- Pilot modules that demonstrate the full content bundle workflow
+
+## Architecture
+
+The repository is organized around a compact workflow:
+
+```text
 osks/
-├── manifest.yaml              # Project + governance config
+├── manifest.yaml
 ├── curriculum/
-│   └── master_curriculum.yaml # Volume/Chapter/Module definitions
-├── engines/                   # schema, metadata, generator, agents, QA
-├── templates/                 # Jinja2 chapter template
-├── modules/                   # Generated content, organized by volume/chapter
-├── labs/                      # Standalone lab definitions
-├── glossary/                  # Shared glossary entries
-├── prompts/compiled/          # Free-tier prompt files (gitignored)
-└── main.py                    # CLI orchestrator
+├── engines/
+├── templates/
+├── modules/
+├── labs/
+├── glossary/
+├── prompts/compiled/
+└── main.py
 ```
 
-## Quick Start
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full stepwise workflow. Short version:
+## Installation
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+.venv\Scripts\Activate.ps1  # Windows PowerShell
 pip install -r requirements.txt
+```
+
+## Usage
+
+```bash
 python main.py --module NET-101 --stage scaffold
-python main.py --module NET-101 --stage research   # paste into Claude.ai, save to research.md
-python main.py --module NET-101 --stage write       # paste into Claude.ai, save to chapter.md
+python main.py --module NET-101 --stage research
+python main.py --module NET-101 --stage write
 python main.py --module NET-101 --qa-only
 ```
 
+## Screenshots Placeholder
+
+Public screenshots and a polished demo preview will be added before the first major release milestone.
+
 ## Roadmap
 
-Planned first five pilot modules: Networking (TCP/IP), Linux, Web Security, Active
-Directory, Cloud Security — each fully authored before expanding further.
+Planned first five pilot modules: Networking (TCP/IP), Linux, Web Security, Active Directory, and Cloud Security.
+
+## License
+
+This project is licensed under the MIT License. See the repository-level [LICENSE](../LICENSE) for details.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow and contribution expectations.

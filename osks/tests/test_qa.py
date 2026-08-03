@@ -50,7 +50,36 @@ def _make_complete_bundle(tmp_path: Path) -> Path:
     module_dir.mkdir()
     for fname in REQUIRED_FILES:
         if fname == "chapter.md":
-            (module_dir / fname).write_text(VALID_FRONTMATTER, encoding="utf-8")
+            chapter_text = VALID_FRONTMATTER + "\n" + "\n".join([
+                "## 📌 1. Module Overview & Domain Mechanics",
+                "This section provides a substantive overview of the topic.",
+                "## 🎯 2. Prerequisites & Target Learning Outcomes",
+                "The reader should understand the core mechanism before proceeding.",
+                "## 🧠 3. Technical Deep-Dive & Architecture",
+                "Detailed technical analysis and state transitions are documented here.",
+                "## ⚡ 4. Operational Commands & Tooling",
+                "Commands and defensive tooling are described in this section.",
+                "## 🧪 5. Hands-on Lab Mapping",
+                "A lab exercise is attached to reinforce the topic.",
+                "## 🛡️ 6. Enterprise Defense & Hardening",
+                "Defensive mitigations and operational guidance are provided.",
+                "## 📚 7. Reference & Citation Matrix",
+                "References are listed to support the technical guidance.",
+            ]) + "\n"
+            (module_dir / fname).write_text(chapter_text, encoding="utf-8")
+        elif fname == "research.md":
+            (module_dir / fname).write_text(
+                "# Research Dossier: NET-101\n\n"
+                "## Verified Primary Source Facts\n"
+                "This dossier contains substantive research findings and evidence.\n"
+                "The module relies on authoritative references and field observations.\n"
+                "The summary highlights key protocol behavior and attack surface analysis.\n\n"
+                "## Low-Level Protocol / System Mechanics\n"
+                "This section covers the technical mechanics in sufficient detail.\n"
+                "It explains handshake state transitions, packet structure, and defensive implications.\n"
+                "It also outlines the relationship between protocol behavior and potential misuse.\n",
+                encoding="utf-8"
+            )
         else:
             (module_dir / fname).write_text(f"# {fname}\nReal content here.\n", encoding="utf-8")
     return module_dir
@@ -105,3 +134,17 @@ def test_qa_detects_missing_primary_evidence_source(tmp_path):
     passed, errors = qa.audit_module_bundle(module_dir)
     assert passed is False
     assert any("Primary Authority" in e for e in errors)
+
+
+def test_qa_detects_empty_research_and_short_chapter(tmp_path):
+    module_dir = _make_complete_bundle(tmp_path)
+    (module_dir / "research.md").write_text("", encoding="utf-8")
+    (module_dir / "chapter.md").write_text(
+        VALID_FRONTMATTER + "\n## 📌 1. Module Overview & Domain Mechanics\nShort body.\n",
+        encoding="utf-8"
+    )
+    qa = QAEngine(root_dir=str(tmp_path))
+    passed, errors = qa.audit_module_bundle(module_dir)
+    assert passed is False
+    assert any("research.md is empty" in e for e in errors)
+    assert any("chapter.md contains insufficient body content" in e for e in errors)

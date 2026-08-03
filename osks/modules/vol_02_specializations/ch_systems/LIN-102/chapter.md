@@ -1,8 +1,8 @@
 ---
-id: "NET-101"
-title: "TCP/IP Protocol Mechanics & Session Handshakes"
-volume: "vol_01_foundations"
-chapter: "ch_networking"
+id: "LIN-102"
+title: "Linux Permissions, Capabilities, and Privilege Escalation"
+volume: "vol_02_specializations"
+chapter: "ch_systems"
 version: "1.0.0"
 stability: "static"
 status: "Research"
@@ -14,8 +14,8 @@ taxonomy:
   skill_level: "intermediate"
 
 learning_outcomes:
-  - "Understand the TCP/IP layered model and handshake mechanics."
-  - "Analyze protocol behavior and identify common network attack surfaces."
+  - "Deconstruct protocol mechanisms at the bit/packet level."
+  - "Analyze threat vectors and configure defensive controls."
 
 evidence:
   sources:
@@ -25,13 +25,13 @@ evidence:
 
 knowledge_graph:
   prerequisites: []
-  next_topics: ["NET-102"]
+  next_topics: ["LIN-103"]
   lab_references: ["LAB-001"]
   glossary_terms: ["tcp", "three_way_handshake"]
-  mitre_attack: ["T1046"]
+  mitre_attack: ["T1548.001"]
 ---
 
-# NET-101: TCP/IP Protocol Mechanics & Session Handshakes
+# LIN-102: Linux Permissions, Capabilities, and Privilege Escalation
 
 ## 📌 1. Module Overview & Domain Mechanics
 > Scope, threat landscape relevance, and protocol/system operational context.
@@ -43,8 +43,8 @@ knowledge_graph:
 * None (Foundational Module)
 
 ### Learning Objectives
-- [ ] Understand the TCP/IP layered model and handshake mechanics.
-- [ ] Analyze protocol behavior and identify common network attack surfaces.
+- [ ] Deconstruct protocol mechanisms at the bit/packet level.
+- [ ] Analyze threat vectors and configure defensive controls.
 
 ---
 
@@ -78,8 +78,8 @@ Understanding the underlying mechanics improves detection fidelity, incident res
 ---
 
 ## 🛡️ 6. Enterprise Defense & Hardening
-* **Offensive Mechanics**: Review how adversaries exploit the underlying mechanism, including abuse of defaults, weak validation, or timing gaps.
-* **Defensive Controls**: Apply least privilege, validate control state, monitor for misuse patterns, and document compensating controls for operational teams.
+* **Offensive Mechanics**: How adversaries abuse or exploit this target.
+* **Defensive Controls**: Hardening steps and detection signatures.
 
 ---
 

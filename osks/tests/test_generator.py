@@ -26,7 +26,9 @@ SAMPLE_METADATA = {
             {"id": "RFC-793", "type": "RFC", "authority": "Primary"}
         ]
     },
-    "knowledge_graph": {}
+    "knowledge_graph": {
+        "lab_references": ["LAB-001"]
+    }
 }
 
 REQUIRED_FILES = [
@@ -63,6 +65,26 @@ def test_scaffold_chapter_contains_frontmatter_id(tmp_path):
     chapter_text = (topic_dir / "chapter.md").read_text(encoding="utf-8")
     assert 'id: "NET-999"' in chapter_text
     assert "## 🧠 3. Technical Deep-Dive & Architecture" in chapter_text
+
+
+def test_scaffold_chapter_contains_substantive_deep_dive_section(tmp_path):
+    project_root = _setup_project(tmp_path)
+    generator = DocumentationGenerator(root_dir=str(project_root))
+    topic_dir = generator.scaffold_topic_bundle(SAMPLE_METADATA)
+
+    chapter_text = (topic_dir / "chapter.md").read_text(encoding="utf-8")
+    assert "Technical Deep-Dive" in chapter_text
+    assert "Flow Overview" in chapter_text
+    assert "*(Populated from verified research dossier)*" not in chapter_text
+
+
+def test_scaffold_chapter_uses_correct_lab_link_path(tmp_path):
+    project_root = _setup_project(tmp_path)
+    generator = DocumentationGenerator(root_dir=str(project_root))
+    topic_dir = generator.scaffold_topic_bundle(SAMPLE_METADATA)
+
+    chapter_text = (topic_dir / "chapter.md").read_text(encoding="utf-8")
+    assert "../../../labs/LAB-001.md" in chapter_text
 
 
 def test_scaffold_does_not_overwrite_existing_chapter(tmp_path):

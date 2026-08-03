@@ -15,6 +15,22 @@ volumes:
             certifications: ["Network+", "CCNA", "OSCP"]
             mitre_mapping: ["T1046"]
             nist_controls: ["PR.AC-5"]
+            taxonomy:
+              domain: "defensive_security"
+              discipline: "network_security"
+              technology: "tcp_ip"
+              skill_level: "intermediate"
+            learning_outcomes:
+              - "Understand the TCP/IP layered model and handshake mechanics."
+              - "Analyze protocol behavior and identify common network attack surfaces."
+            evidence:
+              sources:
+                - id: "RFC-793"
+                  type: "RFC"
+                  authority: "Primary"
+            knowledge_graph:
+              lab_references: ["LAB-001"]
+              glossary_terms: ["tcp", "three_way_handshake"]
 
           - id: "NET-102"
             title: "IP Addressing, Subnetting, and Packet Analysis"
@@ -24,6 +40,22 @@ volumes:
             certifications: ["Network+", "OSCP"]
             mitre_mapping: ["T1046"]
             nist_controls: ["DE.CM-1"]
+            taxonomy:
+              domain: "defensive_security"
+              discipline: "network_security"
+              technology: "tcp_ip"
+              skill_level: "intermediate"
+            learning_outcomes:
+              - "Analyze IPv4 addressing, subnetting, and packet structure."
+              - "Interpret packet-level evidence and identify routing or addressing anomalies."
+            evidence:
+              sources:
+                - id: "RFC-791"
+                  type: "RFC"
+                  authority: "Primary"
+            knowledge_graph:
+              lab_references: ["LAB-001"]
+              glossary_terms: ["ip", "subnetting", "packet"]
 
   - id: "vol_02_specializations"
     title: "Volume 02: Offensive & Defensive Operations"
@@ -39,3 +71,19 @@ volumes:
             certifications: ["RHCSA", "OSCP"]
             mitre_mapping: ["T1548.001"]
             nist_controls: ["PR.AC-6"]
+            taxonomy:
+              domain: "defensive_security"
+              discipline: "linux_security"
+              technology: "linux"
+              skill_level: "intermediate"
+            learning_outcomes:
+              - "Understand Linux permission models and capability inheritance."
+              - "Identify privilege escalation paths and apply least-privilege controls."
+            evidence:
+              sources:
+                - id: "NIST-800-53-AC-6"
+                  type: "NIST"
+                  authority: "Primary"
+            knowledge_graph:
+              lab_references: ["LAB-001"]
+              glossary_terms: ["linux", "capabilities", "privilege_escalation"]

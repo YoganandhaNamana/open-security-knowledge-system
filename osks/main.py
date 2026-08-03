@@ -39,6 +39,45 @@ class OSKSOrchestrator:
             for ch in vol.get("chapters", []):
                 for mod in ch.get("modules", []):
                     if mod["id"] == module_id:
+                        taxonomy = mod.get("taxonomy", {}) or {}
+                        evidence = mod.get("evidence", {}) or {}
+                        knowledge_graph = mod.get("knowledge_graph", {}) or {}
+
+                        default_taxonomy = {
+                            "domain": "defensive_security",
+                            "discipline": "network_security",
+                            "technology": "tcp_ip",
+                            "skill_level": "intermediate"
+                        }
+                        default_taxonomy.update(taxonomy)
+
+                        default_learning_outcomes = [
+                            "Understand the core concepts and operational behavior of this module.",
+                            "Apply defensive reasoning and relevant controls to the topic."
+                        ]
+                        learning_outcomes = mod.get("learning_outcomes") or default_learning_outcomes
+                        if not learning_outcomes:
+                            self.logger.warning(f"No learning_outcomes defined for module '{module_id}', using defaults.")
+                            learning_outcomes = default_learning_outcomes
+
+                        default_evidence_sources = [{"id": "RFC-793", "type": "RFC", "authority": "Primary"}]
+                        sources = evidence.get("sources") or default_evidence_sources
+                        if not sources:
+                            self.logger.warning(f"No evidence sources defined for module '{module_id}', using defaults.")
+                            sources = default_evidence_sources
+
+                        default_knowledge_graph = {
+                            "prerequisites": mod.get("prerequisites", []),
+                            "next_topics": mod.get("next_topics", []),
+                            "lab_references": ["LAB-001"],
+                            "glossary_terms": [],
+                            "mitre_attack": mod.get("mitre_mapping", [])
+                        }
+                        default_knowledge_graph.update(knowledge_graph)
+                        default_knowledge_graph["prerequisites"] = mod.get("prerequisites", default_knowledge_graph.get("prerequisites", []))
+                        default_knowledge_graph["next_topics"] = mod.get("next_topics", default_knowledge_graph.get("next_topics", []))
+                        default_knowledge_graph["mitre_attack"] = mod.get("mitre_mapping", default_knowledge_graph.get("mitre_attack", []))
+
                         return {
                             "id": mod["id"],
                             "title": mod["title"],
@@ -46,28 +85,11 @@ class OSKSOrchestrator:
                             "chapter": ch["id"],
                             "stability": mod.get("stability", "static"),
                             "status": "Research",
-                            "taxonomy": {
-                                "domain": "defensive_security",
-                                "discipline": "network_security",
-                                "technology": "tcp_ip",
-                                "skill_level": "intermediate"
-                            },
-                            "learning_outcomes": [
-                                "Deconstruct protocol mechanisms at the bit/packet level.",
-                                "Analyze threat vectors and configure defensive controls."
-                            ],
-                            "evidence": {
-                                "sources": [
-                                    {"id": "RFC-793", "type": "RFC", "authority": "Primary"}
-                                ]
-                            },
-                            "knowledge_graph": {
-                                "prerequisites": mod.get("prerequisites", []),
-                                "next_topics": mod.get("next_topics", []),
-                                "lab_references": ["LAB-001"],
-                                "glossary_terms": ["tcp", "three_way_handshake"],
-                                "mitre_attack": mod.get("mitre_mapping", [])
-                            }
+                            "taxonomy": default_taxonomy,
+                            "learning_outcomes": learning_outcomes,
+                            "evidence": {"sources": sources},
+                            "knowledge_graph": default_knowledge_graph,
+                            "certifications": mod.get("certifications", []),
                         }
 
         self.logger.error(f"Module '{module_id}' not found in curriculum.")
@@ -117,7 +139,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Open Security Knowledge System (OSKS) - Orchestrator CLI"
     )
-    parser.add_argument("--module", "-m", type=str, default="NET-101", help="Target Module ID")
+    parser.add_argument("--module", "-m", type=str, default="NET-102", help="Target Module ID")
     parser.add_argument(
         "--stage", "-s", type=str,
         choices=["scaffold", "research", "write", "all"],
