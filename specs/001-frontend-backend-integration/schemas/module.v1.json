@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OSKS Module Export v1",
+  "description": "JSON schema for exported module artifacts. Field classification is included as `x-fieldClassification` (required canonical, optional canonical, derived/exported, ui-only). Do not include frontend-only fake IDs as canonical identifiers.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {"type": "string", "x-fieldClassification": "required canonical", "description": "Export schema version"},
+    "id": {"type": "string", "pattern": "^[A-Z]{2,4}-\\d{3}$", "x-fieldClassification": "required canonical", "description": "Canonical Module ID (MUST match master_curriculum.yaml)"},
+    "title": {"type": "string", "x-fieldClassification": "required canonical"},
+    "volume": {"type": "string", "x-fieldClassification": "required canonical"},
+    "chapter": {"type": "string", "x-fieldClassification": "required canonical"},
+    "version": {"type": "string", "x-fieldClassification": "optional canonical", "description": "Module version (optional)"},
+    "stability": {"type": "string", "enum": ["static","time_sensitive"], "x-fieldClassification": "required canonical"},
+    "status": {"type": "string", "x-fieldClassification": "optional canonical", "description": "Lifecycle status (Research, Verification, Authoring, Technical_Review, Published, Deprecated)"},
+    "taxonomy": {
+      "type": "object",
+      "x-fieldClassification": "required canonical",
+      "properties": {
+        "domain": {"type": "string"},
+        "discipline": {"type": "string"},
+        "technology": {"type": "string"},
+        "skill_level": {"type": "string"}
+      },
+      "required": ["domain","discipline","technology"]
+    },
+    "target_environment": {"type": ["object","null"], "x-fieldClassification": "optional canonical", "description": "Optional target environment info (protocols, os_platforms)"},
+    "learning_outcomes": {"type": "array", "items": {"type": "string"}, "minItems": 1, "x-fieldClassification": "required canonical"},
+    "evidence": {
+      "type": "object",
+      "x-fieldClassification": "required canonical",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "type": {"type": "string"},
+              "authority": {"type": "string", "enum": ["Primary","Secondary","Supporting"]},
+              "uri": {"type": ["string","null"], "format": "uri"},
+              "control": {"type": ["string","null"]}
+            },
+            "required": ["id","type","authority"]
+          }
+        }
+      },
+      "required": ["sources"]
+    },
+    "knowledge_graph": {
+      "type": "object",
+      "x-fieldClassification": "required canonical",
+      "properties": {
+        "prerequisites": {"type": "array", "items": {"type": "string"}},
+        "next_topics": {"type": "array", "items": {"type": "string"}},
+        "lab_references": {"type": "array", "items": {"type": "string"}},
+        "glossary_terms": {"type": "array", "items": {"type": "string"}},
+        "mitre_attack": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "rendered_html": {"type": ["string","null"], "x-fieldClassification": "derived/exported", "description": "Optional pre-rendered HTML for fast display"},
+    "raw_markdown": {"type": ["string","null"], "x-fieldClassification": "derived/exported", "description": "Optional raw markdown with frontmatter"},
+    "provenance": {"type": ["object","null"], "x-fieldClassification": "optional canonical", "description": "Optional provenance info (generated_by_agent, llm_profile, prompt_version)"},
+    "changelog": {"type": "array", "x-fieldClassification": "optional canonical", "items": {"type": "object"}},
+    "_ui": {"type": "object", "description": "UI-only derived fields (adapter may populate)", "x-fieldClassification": "ui-only", "properties": {
+      "progressPercent": {"type": "number"},
+      "xpReward": {"type": "number"},
+      "icon": {"type": "string"},
+      "statusUi": {"type": "string"}
+    }},
+    "_notes": {"type": "string", "description": "Exporter notes (optional)"}
+  },
+  "required": ["schemaVersion","id","title","volume","chapter","stability","taxonomy","learning_outcomes","evidence","knowledge_graph"]
+}
