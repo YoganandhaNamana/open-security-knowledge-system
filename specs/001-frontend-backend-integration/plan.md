@@ -23,8 +23,9 @@ Phases
    - Action: Import frontend into `frontend/` after pass-fail review and mapping of assets.
    - Outcome: `frontend/` contains SPA, `frontend/public/api/` read-only snapshots from `osks/exported/v1/`.
 
-5. CI integration (spec only)
-   - Action: Add a separate CI job to run frontend build using Node (isolated job), and copy/export artifacts only after backend tests pass. This is not implemented now.
+5. CI integration (active)
+   - Action: Run backend verification, export generation, traceability validation, and the static export bridge before the frontend build; deploy only after all required gates pass.
+   - Outcome: `osks/exported/v1/` artifacts are copied into `frontend/public/api/v1/` for GitHub Pages consumption.
 
 Milestones
 ----------

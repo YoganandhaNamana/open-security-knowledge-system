@@ -16,6 +16,12 @@ htmlcov/
 site/
 build/
 dist/
+frontend/node_modules/
+frontend/public/
+
+# Generated export metadata: timestamp-only churn is intentionally excluded from VCS.
+# Manifest is treated as build-time-only output, not a committed source artifact.
+osks/exported/v1/manifest.json
 
 # Logs
 logs/

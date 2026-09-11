@@ -15,7 +15,7 @@ Current system architecture
 ---------------------------
 - **Authoritative Backend (Python)**: `osks/` — contains the orchestrator (`osks/main.py`), generation engines (`osks/engines/`), curriculum (`osks/curriculum/master_curriculum.yaml`), templates, modules, QA, and tests. This is the single source of truth for content, metadata schema, and content generation.
 - **Frontend (Gemini / React/Vite)**: external project (not yet merged). Intended to become `frontend/` in the canonical repo; provides interactive presentation and client-side UX.
-- **Build/CI**: Python-centered `.github/workflows/ci.yml` runs `pytest` and `mkdocs build`. Frontend CI will be added later under separate job when integration is finalized.
+- **Build/CI**: Python-centered `.github/workflows/ci.yml` runs backend verification and the static export bridge before building the frontend bundle. The exported JSON snapshots are copied into `frontend/public/api/v1/` as part of the CI pipeline.
 
 Authoritative source boundaries
 ------------------------------
@@ -34,7 +34,7 @@ Backend responsibilities
 -----------------------
 - Continue to author and validate curriculum in `master_curriculum.yaml`.
 - Continue to run generation pipeline (scaffold, research, writer, QA) to produce canonical artifacts.
-- Provide a non-destructive exporter from existing pipeline that emits versioned JSON files (see Curriculum export below). This exporter is a new, separate script/module under `osks/` (e.g., `osks/engines/exporter.py`) to be specified and implemented under change control; not implemented now.
+- Provide a non-destructive exporter from the existing pipeline that emits versioned JSON files (see Curriculum export below). The exporter is implemented in `osks/engines/exporter.py` and is in active use for the static export bridge workflow.
 
 Curriculum data flow (spec)
 ---------------------------
@@ -55,7 +55,7 @@ Python → exported structured data → frontend architecture
   - `labs.v1.json` — lab metadata and references
   - `search-index.v1.json` — pre-built search index (optional; can reuse MkDocs search artifacts)
   - `manifest.json` — export metadata (timestamp, version, generator hash)
-- Files are written to `osks/exported/v1/` and optionally copied to `frontend/public/api/v1/` by a CI step (manual copy by integration step only).
+- Files are written to `osks/exported/v1/` and copied to `frontend/public/api/v1/` by the CI/static-export bridge before the frontend build runs.
 
 Static JSON export as preferred initial method
 ----------------------------------------------
@@ -87,7 +87,13 @@ Conflict prevention rules
 Testing and acceptance criteria
 ------------------------------
 - Unit tests: existing `pytest` suite must pass without changes.
-- Exporter acceptance tests (to be implemented later): `osks/exported/manifest.json` presence, version matches schema, `curriculum-index.v1.json` includes module `NET-101` and `LIN-102` from canonical curriculum.
+- Exporter acceptance tests: `curriculum-index.v1.json` includes the canonical module set from `master_curriculum.yaml`, and the export traceability gate validates module count and IDs before frontend build/deploy.
+
+Decision #6: v1.2 release scope
+-------------------------------
+- The foundation/integration release scope for OSKS v1.2 is intentionally limited to the canonical modules `NET-101`, `NET-102`, and `LIN-102` and is not claimed as a complete curriculum.
+- This scope is tracked as the current foundation/integration delivery target; the exported frontend bundle reflects exactly those canonical IDs and no fabricated placeholders.
+- The exporter implementation and export bridge were introduced during the integration phase and are now active as part of the build pipeline; this is not treated as an always-correct historical artifact claim.
 - Manual acceptance: SPA in `frontend/` can read `osks/exported/v1/curriculum-index.v1.json` and render module list.
 
 Rollback strategy
