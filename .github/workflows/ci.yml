@@ -8,6 +8,8 @@ on:
 
 jobs:
   test-and-build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +31,10 @@ jobs:
         working-directory: osks
         run: pytest tests/ -v
 
+      - name: Run QA validation on pilot module (NET-101)
+        working-directory: osks
+        run: python main.py --module NET-101 --qa-only
+
       - name: Generate verified OSKS exports
         working-directory: osks
         run: python -m engines.exporter
@@ -40,9 +46,6 @@ jobs:
       - name: Full per-module schema validation
         working-directory: osks
         run: pytest tests/test_schema.py tests/test_exporter.py -v
-
-      - name: Static export copy to frontend public API
-        run: node scripts/copy-export-to-frontend.mjs
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -62,6 +65,12 @@ jobs:
       - name: Frontend production build
         working-directory: frontend
         run: npm run build
+
+      - name: Build MkDocs site
+        working-directory: osks
+        run: |
+          pip install mkdocs-material
+          mkdocs build
 
       - name: Deploy build output to GitHub Pages
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
