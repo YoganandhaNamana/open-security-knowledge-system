@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OSKS Curriculum Index v1",
+  "description": "Index of volumes, chapters, and canonical module identifiers.\nField classification: required canonical = must be present; optional canonical = may be present; derived/exported = produced by exporter; ui-only = frontend-only.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Export schema version (required canonical)",
+      "x-fieldClassification": "required canonical"
+    },
+    "volumes": {
+      "type": "array",
+      "description": "Array of volumes (required canonical)",
+      "x-fieldClassification": "required canonical",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "description": "Volume id (required canonical)", "x-fieldClassification": "required canonical"},
+          "title": {"type": "string", "description": "Volume title (required canonical)", "x-fieldClassification": "required canonical"},
+          "chapters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string", "description": "Chapter id (required canonical)", "x-fieldClassification": "required canonical"},
+                "title": {"type": "string", "description": "Chapter title (required canonical)", "x-fieldClassification": "required canonical"},
+                "modules": {
+                  "type": "array",
+                  "description": "List of canonical module references (required canonical)",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string", "description": "Module id, MUST match `master_curriculum.yaml` (required canonical)", "x-fieldClassification": "required canonical"},
+                      "title": {"type": "string", "description": "Module title (optional canonical)", "x-fieldClassification": "optional canonical"}
+                    },
+                    "required": ["id"]
+                  }
+                }
+              },
+              "required": ["id","title","modules"]
+            }
+          }
+        },
+        "required": ["id","title","chapters"]
+      }
+    }
+  },
+  "required": ["schemaVersion","volumes"]
+}

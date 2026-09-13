@@ -1,0 +1,52 @@
+Frontend Inventory (text)
+=========================
+
+Sandbox path:
+  _incoming_gemini_frontend/
+
+Top-level files:
+  .env.example        - env hints (GEMINI_API_KEY, APP_URL)
+  .gitignore
+  assets/             - static image and media assets
+  index.html          - SPA html entry
+  metadata.json       - app metadata (mentions server-side Gemini)
+  package.json        - npm scripts and dependencies (do not modify)
+  README.md           - run/deploy instructions
+  src/                - React + TypeScript source
+  tsconfig.json       - TypeScript config
+  vite.config.ts      - Vite config (Tailwind plugin)
+
+src/ breakdown:
+  main.tsx            - React entry mounts App
+  App.tsx             - top-level composition and client state
+  index.css           - Tailwind styles
+  types.ts            - TypeScript UI models
+  data/osksData.ts    - hardcoded dataset (modules, labs, CVEs, KBs) => must be replaced by adapter
+  components/         - UI components (Dashboard, ModulesView, LiveLabTerminal, TerminalAssistant, ThreatIntel, KnowledgeBase, etc.)
+
+Component responsibilities (summary):
+- App.tsx: global client state and navigation
+- Dashboard: overview cards and module highlights
+- ModulesView: list of modules and selection
+- LearningJourney: stage navigation and rendering
+- LiveLabTerminal: simulated terminal sandbox and flag verification (client-only)
+- TerminalAssistant: CLI-style navigation assistant (client-only)
+- ThreatIntel / KnowledgeBase: displays static CVE and KB content
+
+Dependencies (selected):
+- react, react-dom, vite, @vitejs/plugin-react
+- tailwindcss, @tailwindcss/vite
+- @google/genai (Gemini client; implies server-side AI usage)
+- express, dotenv (server hints present but no server code)
+
+Data sources and patterns:
+- No runtime API calls: SPA is offline-first and imports `src/data/osksData.ts` directly.
+- `osksData.ts` contains UI-only IDs (`mod-recon`, etc.), lab flags, target IPs, and simulated terminal outputs.
+
+Preserve vs Adapt:
+- Preserve: visual components, styling, Vite config (moved under `frontend/` later), icons and layouts.
+- Adapt: `src/data/osksData.ts` => replace with adapter to consume `osks/exported/v1/` JSON. Map frontend IDs to canonical IDs.
+- Sanitize: `LiveLabTerminal` and `INTERACTIVE_LABS` must not ship real flags or host IPs; mark sandbox_only fields.
+
+Notes:
+- Do not merge sandbox `_incoming_gemini_frontend/` into repo root. Import to `frontend/` only after mapping and approval.

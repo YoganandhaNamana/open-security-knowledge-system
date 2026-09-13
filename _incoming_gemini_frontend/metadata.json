@@ -1,0 +1,6 @@
+{
+  "name": "Open Security Knowledge System",
+  "description": "A premium cybersecurity learning platform presentation layer for OSKS with interactive learning paths, threat labs, module cards, and cybersecurity dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

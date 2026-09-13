@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "osks-export/v1",
+  "id": "NET-101",
+  "title": "TCP/IP Protocol Mechanics & Session Handshakes",
+  "volume": "vol_01_foundations",
+  "chapter": "ch_networking",
+  "version": "1.0.0",
+  "stability": "static",
+  "status": "Research",
+  "taxonomy": {
+    "domain": "defensive_security",
+    "discipline": "network_security",
+    "technology": "tcp_ip",
+    "skill_level": "intermediate"
+  },
+  "learning_outcomes": [
+    "Understand the TCP/IP layered model and handshake mechanics.",
+    "Analyze protocol behavior and identify common network attack surfaces."
+  ],
+  "evidence": {
+    "sources": [
+      {
+        "id": "RFC-793",
+        "type": "RFC",
+        "authority": "Primary",
+        "uri": null,
+        "control": null
+      }
+    ]
+  },
+  "knowledge_graph": {
+    "prerequisites": [],
+    "next_topics": [],
+    "lab_references": [
+      "LAB-001"
+    ],
+    "glossary_terms": [
+      "tcp",
+      "three_way_handshake"
+    ],
+    "mitre_attack": []
+  },
+  "rendered_html": "---\nid: \"NET-101\"\ntitle: \"TCP/IP Protocol Mechanics & Session Handshakes\"\nvolume: \"vol_01_foundations\"\nchapter: \"ch_networking\"\nversion: \"1.0.0\"\nstability: \"static\"\nstatus: \"Research\"\n\ntaxonomy:\n  domain: \"defensive_security\"\n  discipline: \"network_security\"\n  technology: \"tcp_ip\"\n  skill_level: \"intermediate\"\n\nlearning_outcomes:\n  - \"Understand the TCP/IP layered model and handshake mechanics.\"\n  - \"Analyze protocol behavior and identify common network attack surfaces.\"\n\nevidence:\n  sources:\n    - id: \"RFC-793\"\n      type: \"RFC\"\n      authority: \"Primary\"\n\nknowledge_graph:\n  prerequisites: []\n  next_topics: []\n  lab_references: [\"LAB-001\"]\n  glossary_terms: [\"tcp\", \"three_way_handshake\"]\n  mitre_attack: []\n---\n\n# NET-101: TCP/IP Protocol Mechanics & Session Handshakes\n\n## 📌 1. Module Overview & Domain Mechanics\n> Scope, threat landscape relevance, and protocol/system operational context.\n\n---\n\n## 🎯 2. Prerequisites & Target Learning Outcomes\n### Prerequisites\n* None (Foundational Module)\n\n### Learning Objectives\n- [ ] Understand the TCP/IP layered model and handshake mechanics.\n- [ ] Analyze protocol behavior and identify common network attack surfaces.\n\n---\n\n## 🧠 3. Technical Deep-Dive & Architecture\n### Flow Overview\nThis section provides a concise technical walkthrough of the module's core mechanisms, operational behavior, and defensive relevance. The content is intended to be expanded with verified research evidence during the writing stage.\n\n### Key Mechanics\n- Describe the protocol, system, or control behavior in sequence.\n- Call out important fields, state transitions, timing, or dependencies.\n- Explain how the mechanism can be observed, monitored, or defended against.\n\n### Example Execution Flow\n```text\nStart -> Observe -> Analyze -> Respond\n```\n\n### Why It Matters\nUnderstanding the underlying mechanics improves detection fidelity, incident response accuracy, and hardening decisions.\n\n---\n\n## ⚡ 4. Operational Commands & Tooling\n*(See companion document [commands.md](commands.md) for verified syntax)*\n\n---\n\n## 🧪 5. Hands-on Lab Mapping\n* **Associated Lab Setup**: [LAB-001](../../../labs/LAB-001.md)\n\n---\n\n## 🛡️ 6. Enterprise Defense & Hardening\n* **Offensive Mechanics**: Review how adversaries exploit the underlying mechanism, including abuse of defaults, weak validation, or timing gaps.\n* **Defensive Controls**: Apply least privilege, validate control state, monitor for misuse patterns, and document compensating controls for operational teams.\n\n---\n\n## 📚 7. Reference & Citation Matrix\n* **[Primary Authority]** `RFC-793` (RFC)\n",
+  "changelog": []
+}

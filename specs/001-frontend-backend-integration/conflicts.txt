@@ -1,0 +1,35 @@
+Conflicts and Compatibility Notes (text)
+======================================
+
+File-level conflict potential (do NOT merge these into repo root):
+- package.json, vite.config.ts, tsconfig.json, src/, index.html from frontend — must be placed under `frontend/` to avoid colliding with repo root files.
+- Any `osks/` directory from frontend (none present) must never overwrite `OSKS-2026/osks/`.
+
+Semantic/data conflicts:
+- Module IDs:
+  - Frontend uses `mod-recon`, `mod-webapp`, `mod-malware`, etc.
+  - Canonical uses `NET-101`, `NET-102`, `LIN-102`, etc. Canonical IDs are authoritative; create mapping table before integration.
+- Data shape:
+  - Frontend `SecurityModule` includes UI-only fields (progressPercent, xpReward, icon). These are derived and must be produced client-side.
+  - Canonical `ModuleMetadata` includes evidence, taxonomy, and knowledge_graph fields that are authoritative.
+
+Dependency conflicts:
+- Node vs Python tooling: keep Node tooling in `frontend/` and Python in `osks/` to avoid env confusion.
+- `@google/genai` implies use of Gemini; guard API key usage behind secure server-side integration later.
+
+Security concerns:
+- `.env.example` contains GEMINI_API_KEY placeholder — do not commit keys. Use secret stores.
+- `INTERACTIVE_LABS` contains `flag` strings and `targetIp` addresses — sanitize or mark as `sandbox_only`.
+
+Hardcoded/fake data to replace:
+- `src/data/osksData.ts` full dataset: modules, labs, CVEs, KBs, user stats. Replace with canonical exports.
+
+Files that must never overwrite canonical OSKS:
+- Any file under `osks/` in the frontend sandbox
+- `osks/curriculum/master_curriculum.yaml`
+- `osks/engines/*` and `osks/templates/*`
+
+Recommendation summary:
+1. Do not merge frontend files into repo root. Create `frontend/` when ready.
+2. Replace `src/data/osksData.ts` with adapter that consumes `osks/exported/v1/` JSON.
+3. Sanitize lab flags and IPs; do not include secrets in repo.
