@@ -200,3 +200,42 @@ export interface UserStats {
     score: number; // 0 - 100
   }[];
 }
+
+/**
+ * Canonical curriculum data that can be represented without inventing product
+ * semantics. This is intentionally distinct from the legacy Gemini UI model
+ * above, whose lesson, XP, progress, stage, and lab fields are not part of
+ * the OSKS v1 export contract.
+ */
+export type CanonicalSkillLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' | string;
+
+export interface CanonicalTaxonomy {
+  domain: string;
+  discipline: string;
+  technology: string;
+  skillLevel?: CanonicalSkillLevel;
+}
+
+export interface CanonicalEvidenceSource {
+  id: string;
+  type: string;
+  authority: 'Primary' | 'Secondary' | 'Supporting';
+  uri?: string | null;
+  control?: string | null;
+}
+
+export interface CanonicalModuleViewModel {
+  id: string;
+  title: string;
+  volume: string;
+  chapter: string;
+  taxonomy: CanonicalTaxonomy;
+  learningOutcomes: string[];
+  prerequisites: string[];
+  nextTopics: string[];
+  glossaryTerms: string[];
+  labReferences: string[];
+  mitreReferences: string[];
+  evidenceSources: CanonicalEvidenceSource[];
+  lifecycleStatus?: string;
+}
