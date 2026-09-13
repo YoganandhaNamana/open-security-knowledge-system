@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "osks-export/v1",
+  "volumes": [
+    {
+      "id": "vol_01_foundations",
+      "title": "Volume 01: Computer Science & Enterprise Infrastructure",
+      "chapters": [
+        {
+          "id": "ch_networking",
+          "title": "Networking Principles & Protocol Mechanics",
+          "modules": [
+            {
+              "id": "NET-101",
+              "title": "TCP/IP Protocol Mechanics & Session Handshakes"
+            },
+            {
+              "id": "NET-102",
+              "title": "IP Addressing, Subnetting, and Packet Analysis"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vol_02_specializations",
+      "title": "Volume 02: Offensive & Defensive Operations",
+      "chapters": [
+        {
+          "id": "ch_systems",
+          "title": "Linux Operating System Hardening & Security",
+          "modules": [
+            {
+              "id": "LIN-102",
+              "title": "Linux Permissions, Capabilities, and Privilege Escalation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
