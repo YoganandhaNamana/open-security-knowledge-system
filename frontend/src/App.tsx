@@ -15,6 +15,8 @@ const unavailableFeatures = [
   ['Profile and achievements', 'Learner progress, XP, ranks, and achievements are user-state data and are unavailable.'],
 ] as const;
 
+const icons = [Gauge, FlaskConical, Terminal, ShieldAlert, Database, Gauge];
+
 export default function App() {
   const [modules, setModules] = useState<CanonicalModuleViewModel[]>([]);
   const [selectedModule, setSelectedModule] = useState<CanonicalModuleViewModel>();
@@ -41,7 +43,15 @@ export default function App() {
       </header>
       <div className="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-[220px_1fr]">
         <aside className="border-b border-white/10 bg-slate-950/40 p-4 md:min-h-[calc(100vh-73px)] md:border-b-0 md:border-r">
-          <nav className="space-y-2"><button onClick={() => setView('curriculum')} className="flex w-full items-center gap-2 rounded-lg bg-sky-500/10 px-3 py-2 text-left text-sm text-sky-300"><BookOpen size={16} /> Curriculum</button>{unavailableFeatures.map((feature, index) => <button key={feature[0]} onClick={() => showUnavailable(feature)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-400 hover:bg-white/5 hover:text-white">{[Gauge, FlaskConical, Terminal, ShieldAlert, Database, Gauge][index]({ size: 16 })}{feature[0]}</button>)}</nav>
+          <nav className="space-y-2"><button onClick={() => setView('curriculum')} className="flex w-full items-center gap-2 rounded-lg bg-sky-500/10 px-3 py-2 text-left text-sm text-sky-300"><BookOpen size={16} /> Curriculum</button>{unavailableFeatures.map((feature, index) => {
+            const Icon = icons[index];
+            return (
+              <button key={feature[0]} onClick={() => showUnavailable(feature)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-400 hover:bg-white/5 hover:text-white">
+                <Icon size={16} />
+                {feature[0]}
+              </button>
+            );
+          })}</nav>
         </aside>
         <main>{error ? <div className="m-6 rounded-xl border border-red-500/30 bg-red-500/10 p-5 text-red-100"><h1 className="font-bold">Canonical curriculum unavailable</h1><p className="mt-2 text-sm">{error}</p></div> : view === 'curriculum' ? <CanonicalCurriculum modules={modules} selectedModule={selectedModule} onSelectModule={setSelectedModule} /> : <section className="m-4 rounded-2xl border border-amber-500/20 bg-slate-900/70 p-6 sm:m-8"><h1 className="text-2xl font-bold text-white">{unavailable[0]} unavailable</h1><p className="mt-3 max-w-2xl text-slate-400">{unavailable[1]}</p><p className="mt-4 text-xs text-amber-200">This UI is intentionally disabled rather than populated with mock data.</p></section>}</main>
       </div>
